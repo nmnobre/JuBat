@@ -13,6 +13,7 @@ function  ElectrodeDiffusion(electrode::Electrode, mesh::Mesh, mlen::Int64, c::M
     coeff = mesh.gs.x.^2 .* mesh.gs.weight .* mesh.gs.detJ
     M = Assemble(Vi, Vj, mesh.gs.Ni, mesh.gs.Ni, coeff , mlen)
     Ds_eff =  electrode.Ds * Arrhenius(electrode.Eac_D, T).* (1 .+ (theta.*c))
+    println("Ds ", electrode.Ds)
     coeff = - Ds_eff .* mesh.gs.x.^2 .* mesh.gs.weight .* mesh.gs.detJ
     K = Assemble(Vi, Vj, mesh.gs.dNidx, mesh.gs.dNidx, coeff, mlen) 
     return M, K

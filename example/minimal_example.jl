@@ -6,7 +6,7 @@ Crate = 1
 i= 5*Crate
 opt.Current = x-> i
 opt.time = [0 3600]
-opt.model = "P2D" # choose model, other options are "SPM" or "SPMe"
+opt.model = "SPM" # choose model, other options are "SPM" or "SPMe"
 case1 = JuBat.SetCase(param_dim, opt)
 result = JuBat.Solve(case1)
 

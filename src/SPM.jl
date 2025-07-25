@@ -19,7 +19,9 @@ function SPM(case::Case, yt::Array{Float64}, t::Float64; jacobi::String)
         param = case.param
         mesh_np = case.mesh["negative particle"]
         mesh_pp = case.mesh["positive particle"]
+        print("NE ")
         M_np, K_np = ElectrodeDiffusion(param.NE, mesh_np, mesh_np.nlen, csn_gs, theta_Mn)
+        print("PE ")
         M_pp, K_pp = ElectrodeDiffusion(param.PE, mesh_pp, mesh_pp.nlen, csp_gs, theta_Mp)   
         M_np .*= param.scale.ts_n / param_dim.scale.t0
         M_pp .*= param.scale.ts_p / param_dim.scale.t0
@@ -35,7 +37,7 @@ function SPM_BC(case::Case, variables::Dict{String, Union{Array{Float64},Float64
     param = case.param
     j_n = variables["negative electrode interfacial current density"]
     j_p = variables["positive electrode interfacial current density"] 
-
+    println("j_n ", j_n, " j_p ", j_p, " Rn ", param.NE.rs, " Rp ", param.PE.rs)
     flux_np = zeros(Float64, case.mesh["negative particle"].nlen, 1)
     flux_np[end] = - j_n * param.NE.rs^2
 
@@ -63,6 +65,7 @@ function SPM_variables(case::Case, yt::Array{Float64}, t::Float64)
     end
     cn_surf = variables["negative particle surface lithium concentration"]
     cp_surf = variables["positive particle surface lithium concentration"]
+    println(t, " cp_surf ", cp_surf, " ", cp_surf - param.PE.cs0, " cn_surf ", cn_surf, " ", cn_surf - param.NE.cs0)
     u_n = param.NE.U(cn_surf) .+ (T .- case.param.cell.T0) * param.NE.dUdT(cn_surf)
     u_p = param.PE.U(cp_surf) .+ (T .- case.param.cell.T0) * param.PE.dUdT(cp_surf)
     j0_n =  param.NE.k * Arrhenius(param.NE.Eac_k, T) * sqrt.(cn_surf .* param.EL.ce0 .* abs.(1.0 .- cn_surf))
