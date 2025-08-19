@@ -7,7 +7,7 @@ function Solve(case::Case)
     
     # initialisation 
     y0 = ModelInitialisation(case) 
-
+    println("Init ", y0)
     if case.opt.solveType == "Crank-Nicolson"
         theta = 0.5 
     elseif case.opt.solveType == "forward"
@@ -24,11 +24,15 @@ function Solve(case::Case)
     num = round(Int64, (t_end - t0)/dt * 1.5) 
     variables_hist = StandardVariables(case, num)
     errors = zeros(num, 1)
-
+    println("dt ", dt, " t0 ", t0, " t_end ", t_end)
     t = t0
     vt = 2  
     v = 1 
     M_old, K_old, F_old, variables, y_phi= CallModel(case, y0, t, jacobi="update") 
+    println("M_old ", M_old)
+    println("K_old ", K_old)
+    println("F_old ", F_old)
+    println("y_phi ", y_phi)
     dt_init = 1e-8
     vc = 1:size(M_old,1)
     y_c = (M_old - K_old * dt_init) \ (M_old * y0[vc] + F_old * dt_init)

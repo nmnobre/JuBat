@@ -25,6 +25,7 @@ function SPM(case::Case, yt::Array{Float64}, t::Float64; jacobi::String)
         M_pp, K_pp = ElectrodeDiffusion(param.PE, mesh_pp, mesh_pp.nlen, csp_gs, theta_Mp)   
         M_np .*= param.scale.ts_n / param_dim.scale.t0
         M_pp .*= param.scale.ts_p / param_dim.scale.t0
+        println("M_n scale ", param.scale.ts_n / param_dim.scale.t0, " M_p scale ", param.scale.ts_p / param_dim.scale.t0)
     end
     K = blockdiag(K_np, K_pp)
     M = blockdiag(M_np, M_pp)
@@ -38,6 +39,7 @@ function SPM_BC(case::Case, variables::Dict{String, Union{Array{Float64},Float64
     j_n = variables["negative electrode interfacial current density"]
     j_p = variables["positive electrode interfacial current density"] 
     println("j_n ", j_n, " j_p ", j_p, " Rn ", param.NE.rs, " Rp ", param.PE.rs)
+    println("dofs_n ", case.mesh["negative particle"].nlen, " dofs_p ", case.mesh["positive particle"].nlen)
     flux_np = zeros(Float64, case.mesh["negative particle"].nlen, 1)
     flux_np[end] = - j_n * param.NE.rs^2
 

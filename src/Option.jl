@@ -20,7 +20,7 @@ using Parameters
     dt::Array{Float64} = [1, 100]
     dtType::String  = "constant" # auto or manual
     dtThreshold::Float64 = 0.01
-    solveType::String  = "Crank-Nicolson" # forward, backward or Crank-Nicolson
+    solveType::String  = "backward" # forward, backward or Crank-Nicolson
     outputType::String  = "auto" # auto or manual
     jacobi::String = "constant" # constant or update
     thermalmodel::String  = "none" # none, lumped or full (not implemented)
